@@ -1,12 +1,11 @@
-console.log("Eanova script loaded v2");
+console.log("Eanova script loaded v3");
 
 const SUPABASE_URL = "https://qxopmudoddudacpvauhi.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_ZIC5UvRVvV2kL72an5ngOA_J9QhKnmU";
 
-const FUND_GOAL = 100000;
-
-// EDIT THIS NUMBER ONLY WHEN YOU WANT TO CHANGE THE FUNDRAISER AMOUNT.
-const RAISED_AMOUNT = 25000;
+// MANUALLY EDIT THESE TWO VALUES ONLY.
+const RAISED_DISPLAY_TEXT = "$25,000 / $100,000 · 25%";
+const RAISED_PROGRESS_WIDTH = "25%";
 
 // Popunder ad code URL.
 // It loads only after the user clicks Send & Support.
@@ -27,9 +26,16 @@ const progressGlow = document.getElementById("progressGlow");
 const progressMoney = document.getElementById("progressMoney");
 
 let sentCount = Number(localStorage.getItem("eanova_sent_count") || "0");
+const savedName = localStorage.getItem("eanova_saved_name") || "";
+
+nameInput.value = savedName;
 
 updateTextCounter();
-updateFundraiserProgress();
+updateManualRaisedDisplay();
+
+nameInput.addEventListener("input", () => {
+  localStorage.setItem("eanova_saved_name", nameInput.value.trim());
+});
 
 document.addEventListener("mousemove", (event) => {
   const x = (event.clientX / window.innerWidth) * 100;
@@ -78,6 +84,8 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
+  localStorage.setItem("eanova_saved_name", name);
+
   loadPopunderAd();
 
   sendBtn.disabled = true;
@@ -119,21 +127,10 @@ function updateTextCounter() {
   textCount.textContent = sentCount;
 }
 
-function updateFundraiserProgress() {
-  const safeRaisedAmount = Math.max(0, Math.min(RAISED_AMOUNT, FUND_GOAL));
-  const percentage = Math.round((safeRaisedAmount / FUND_GOAL) * 100);
-
-  progressFill.style.width = percentage + "%";
-  progressGlow.style.left = percentage + "%";
-
-  progressMoney.textContent =
-    "$" +
-    safeRaisedAmount.toLocaleString() +
-    " / $" +
-    FUND_GOAL.toLocaleString() +
-    " · " +
-    percentage +
-    "%";
+function updateManualRaisedDisplay() {
+  progressMoney.textContent = RAISED_DISPLAY_TEXT;
+  progressFill.style.width = RAISED_PROGRESS_WIDTH;
+  progressGlow.style.left = RAISED_PROGRESS_WIDTH;
 }
 
 function showSuccess(text) {
