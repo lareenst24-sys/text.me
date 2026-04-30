@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Eanova - Send Message</title>
+  <title>Eanova Text Fund</title>
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -17,6 +17,14 @@
 
   <main class="app" id="app">
     <form id="messageForm">
+      <section class="hero-copy">
+        <p class="eyebrow">Eanova Text Fund</p>
+        <h1>Send a text. Help support the fund.</h1>
+        <p class="subtitle">
+          Share a joke, story, kind message, or idea. No payment needed — ads on this site help support the fundraiser.
+        </p>
+      </section>
+
       <section class="top-row">
         <div class="name-box">
           <svg class="name-icon" viewBox="0 0 24 24" fill="none">
@@ -34,7 +42,7 @@
         </div>
 
         <div class="count-title">
-          No. of texts <span id="textCount">0</span>
+          Texts Sent <span id="textCount">0</span>
         </div>
 
         <div class="progress-wrap">
@@ -47,17 +55,21 @@
         </div>
       </section>
 
+      <section class="prompt-row">
+        <span class="prompt-pill">Prompt: Write a joke, tiny story, kind message, or idea.</span>
+      </section>
+
       <section class="message-area">
         <div class="message-box">
           <textarea
             id="message"
             maxlength="1000"
-            placeholder="Type your message here..."
+            placeholder="Write a joke, story, message, or idea..."
             required
           ></textarea>
 
           <div class="send-section">
-            <button class="send-btn" id="sendBtn" type="submit" aria-label="Send message">
+            <button class="send-btn" id="sendBtn" type="submit" aria-label="Send and support">
               <svg class="send-icon" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M4 12L20 4L16 20L12 14L4 12Z"
@@ -67,6 +79,7 @@
                 />
               </svg>
             </button>
+            <span class="send-label">Send & Support</span>
           </div>
         </div>
       </section>
@@ -77,7 +90,7 @@
     </form>
 
     <div class="tiny-info">
-      Messages are sent privately. No login needed.
+      No payment needed. Activity and ads on this site help support the fund.
     </div>
   </main>
 
