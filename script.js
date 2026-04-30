@@ -1,5 +1,7 @@
-const SUPABASE_URL ="https://qxopmudoddudacpvauhi.supabase.co";
-const SUPABASE_ANON_KEY ="sb_publishable_ZIC5UvRVvV2kL72an5ngOA_J9QhKnmU";
+console.log("Eanova script loaded v2");
+
+const SUPABASE_URL = "https://qxopmudoddudacpvauhi.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_ZIC5UvRVvV2kL72an5ngOA_J9QhKnmU";
 
 const FUND_GOAL = 100000;
 
@@ -76,7 +78,6 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
-  // Trigger popunder when user clicks Send & Support.
   loadPopunderAd();
 
   sendBtn.disabled = true;
@@ -91,8 +92,8 @@ form.addEventListener("submit", async (event) => {
     ]);
 
   if (error) {
-    console.error(error);
-    showError("Message failed. Check Supabase keys or table policy.");
+    console.error("Supabase insert error:", error);
+    showError("Message failed. Check Supabase setup.");
     sendBtn.disabled = false;
     return;
   }
