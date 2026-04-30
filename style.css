@@ -117,7 +117,8 @@ body {
 
 .name-box,
 .message-box,
-.prompt-pill {
+.prompt-pill,
+.banner-ad {
   background: var(--panel-strong);
   border: 1px solid var(--border);
   box-shadow:
@@ -357,11 +358,38 @@ textarea {
   color: var(--danger);
 }
 
+.ad-section {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ad-label {
+  margin: 0 0 8px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(123, 135, 156, 0.75);
+}
+
+.banner-ad {
+  width: 320px;
+  min-height: 270px;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.banner-ad iframe {
+  max-width: 100%;
+}
+
 .tiny-info {
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  right: 0;
+  margin-top: 18px;
   text-align: center;
   font-size: 13px;
   color: var(--muted);
@@ -520,9 +548,17 @@ textarea {
     margin-top: 18px;
   }
 
+  .ad-section {
+    margin-top: 22px;
+  }
+
+  .banner-ad {
+    width: 320px;
+    min-height: 270px;
+  }
+
   .tiny-info {
-    position: static;
-    margin-top: 40px;
+    margin-top: 22px;
     padding: 0 20px;
     font-size: 12px;
     line-height: 1.5;
@@ -570,5 +606,10 @@ textarea {
     padding: 20px 22px;
     font-size: 14px;
     line-height: 1.4;
+  }
+
+  .banner-ad {
+    width: 310px;
+    min-height: 270px;
   }
 }
