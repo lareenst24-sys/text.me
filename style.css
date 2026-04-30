@@ -94,10 +94,6 @@ body {
   color: var(--blue-strong);
 }
 
-.hero-copy h1 {
-  display: none;
-}
-
 .subtitle {
   margin: 0 auto;
   max-width: 760px;
