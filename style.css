@@ -73,8 +73,8 @@ body {
   position: relative;
   z-index: 2;
   width: min(1180px, 100%);
-  min-height: 620px;
-  padding: 34px 42px 42px;
+  min-height: 560px;
+  padding: 24px 42px 42px;
   transform-style: preserve-3d;
   transition: transform 0.18s ease;
 }
@@ -82,32 +82,30 @@ body {
 .hero-copy {
   text-align: center;
   max-width: 760px;
-  margin: 0 auto 34px;
+  margin: 0 auto 44px;
 }
 
 .eyebrow {
-  margin: 0 0 8px;
+  margin: 0 0 14px;
   font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  font-weight: 900;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--blue-strong);
 }
 
 .hero-copy h1 {
-  margin: 0;
-  font-size: clamp(28px, 4vw, 48px);
-  line-height: 1.05;
-  letter-spacing: -1.4px;
-  color: #162033;
+  display: none;
 }
 
 .subtitle {
-  margin: 14px auto 0;
-  max-width: 640px;
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--muted);
+  margin: 0 auto;
+  max-width: 760px;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: -0.35px;
+  color: #26324a;
 }
 
 .top-row {
@@ -379,26 +377,23 @@ textarea {
   .app {
     width: 100%;
     min-height: 100vh;
-    padding: 28px 6px 24px;
+    padding: 24px 6px 24px;
     transform: none !important;
   }
 
   .hero-copy {
-    margin-bottom: 28px;
+    margin-bottom: 30px;
   }
 
   .eyebrow {
     font-size: 11px;
-  }
-
-  .hero-copy h1 {
-    font-size: 29px;
-    line-height: 1.1;
+    margin-bottom: 12px;
   }
 
   .subtitle {
-    font-size: 13px;
-    max-width: 340px;
+    font-size: 18px;
+    max-width: 360px;
+    line-height: 1.45;
   }
 
   .top-row {
