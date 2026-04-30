@@ -6,6 +6,11 @@ const FUND_GOAL = 100000;
 // EDIT THIS NUMBER ONLY WHEN YOU WANT TO CHANGE THE FUNDRAISER AMOUNT.
 const RAISED_AMOUNT = 25000;
 
+// Popunder ad code URL.
+// It loads only after the user clicks Send & Support.
+const POPUNDER_AD_URL =
+  "https://pl29109905.profitablecpmratenetwork.com/7a/de/3d/7ade3dd6e1b4fe13cc5ca0a8d7700827.js";
+
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const app = document.getElementById("app");
@@ -71,6 +76,9 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
+  // Trigger popunder when user clicks Send & Support.
+  loadPopunderAd();
+
   sendBtn.disabled = true;
 
   const { error } = await supabaseClient
@@ -98,6 +106,13 @@ form.addEventListener("submit", async (event) => {
 
   sendBtn.disabled = false;
 });
+
+function loadPopunderAd() {
+  const adScript = document.createElement("script");
+  adScript.src = POPUNDER_AD_URL;
+  adScript.async = true;
+  document.body.appendChild(adScript);
+}
 
 function updateTextCounter() {
   textCount.textContent = sentCount;
