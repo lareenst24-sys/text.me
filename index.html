@@ -81,15 +81,15 @@
       }
     }
 
-   .app {
-     position: relative;
-     z-index: 2;
-     width: min(1180px, 100%);
-     min-height: 650px;
-     padding: 42px;
-     transform-style: preserve-3d;
-     transition: transform 0.18s ease;
-   } 
+    .app {
+      position: relative;
+      z-index: 2;
+      width: min(1180px, 100%);
+      min-height: 650px;
+      padding: 42px;
+      transform-style: preserve-3d;
+      transition: transform 0.18s ease;
+    }
 
     .top-row {
       display: grid;
@@ -314,46 +314,161 @@
     @media (max-width: 850px) {
       body {
         overflow: auto;
-        padding: 18px;
+        padding: 16px;
+        align-items: flex-start;
       }
 
       .app {
-        min-height: auto;
-        padding: 24px;
-        border-radius: 28px;
+        width: 100%;
+        min-height: 100vh;
+        padding: 34px 6px 24px;
+        transform: none !important;
       }
 
       .top-row {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+          "name progress"
+          "count count";
+        gap: 18px;
+        align-items: center;
+      }
+
+      .name-box {
+        grid-area: name;
+        height: 52px;
+        border-radius: 17px;
+        padding: 0 13px;
+        gap: 9px;
+      }
+
+      .name-icon {
+        width: 21px;
+        height: 21px;
+      }
+
+      input {
+        font-size: 15px;
+      }
+
+      .progress-wrap {
+        grid-area: progress;
+        width: 100%;
+      }
+
+      .progress-label {
+        font-size: 15px;
+        margin-bottom: 7px;
+        text-align: right;
+      }
+
+      .progress-track {
+        height: 13px;
+      }
+
+      .progress-glow {
+        width: 20px;
+        height: 20px;
       }
 
       .count-title {
-        order: -1;
-        font-size: 25px;
+        grid-area: count;
+        text-align: center;
+        font-size: 27px;
+        margin-top: 28px;
       }
 
       .message-area {
-        margin-top: 36px;
+        margin-top: 34px;
+        display: flex;
+        justify-content: center;
       }
 
       .message-box {
+        width: 100%;
+        min-height: 390px;
+        border-radius: 30px;
+        display: grid;
         grid-template-columns: 1fr;
+        grid-template-rows: 1fr 90px;
+        overflow: hidden;
+      }
+
+      textarea {
+        min-height: 300px;
+        padding: 26px 24px;
+        font-size: 17px;
+        line-height: 1.6;
       }
 
       .send-section {
         border-left: none;
-        border-top: 1px solid rgba(56, 189, 248, 0.24);
-        padding: 18px;
+        border-top: 1px solid rgba(56, 189, 248, 0.22);
+        padding: 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
-      textarea {
-        min-height: 190px;
-        padding: 24px;
+      .send-btn {
+        width: 62px;
+        height: 62px;
+        border-radius: 21px;
+      }
+
+      .send-icon {
+        width: 30px;
+        height: 30px;
+      }
+
+      .bottom-row {
+        margin-top: 18px;
       }
 
       .tiny-info {
         position: static;
-        margin-top: 26px;
+        margin-top: 46px;
+        padding: 0 20px;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .app {
+        padding-left: 2px;
+        padding-right: 2px;
+      }
+
+      .top-row {
+        gap: 14px;
+      }
+
+      .name-box {
+        height: 50px;
+        padding: 0 11px;
+      }
+
+      input {
+        font-size: 14px;
+      }
+
+      .progress-label {
+        font-size: 14px;
+      }
+
+      .count-title {
+        font-size: 25px;
+      }
+
+      .message-box {
+        min-height: 380px;
+      }
+
+      textarea {
+        min-height: 290px;
+        padding: 24px 20px;
       }
     }
   </style>
@@ -456,10 +571,12 @@
       document.body.style.setProperty("--mouse-x", x + "%");
       document.body.style.setProperty("--mouse-y", y + "%");
 
-      const rotateX = (event.clientY / window.innerHeight - 0.5) * -5;
-      const rotateY = (event.clientX / window.innerWidth - 0.5) * 5;
+      if (window.innerWidth > 850) {
+        const rotateX = (event.clientY / window.innerHeight - 0.5) * -5;
+        const rotateY = (event.clientX / window.innerWidth - 0.5) * 5;
 
-      app.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        app.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      }
     });
 
     document.addEventListener("mouseleave", () => {
