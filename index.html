@@ -4,21 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Eanova - Send a Message</title>
+  <title>Eanova - Send Message</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
-      --bg: #05020a;
-      --card: rgba(255, 255, 255, 0.08);
-      --card-border: rgba(255, 255, 255, 0.14);
-      --text: #ffffff;
-      --muted: #b7a9cc;
-      --purple: #8b5cf6;
-      --purple-2: #a855f7;
-      --danger: #ff5c7a;
-      --success: #4ade80;
+      --bg: #ffffff;
+      --panel: rgba(255, 255, 255, 0.72);
+      --panel-strong: rgba(255, 255, 255, 0.92);
+      --border: rgba(120, 190, 255, 0.35);
+      --blue: #38bdf8;
+      --blue-strong: #0ea5e9;
+      --text: #182033;
+      --muted: #7b879c;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --shadow: rgba(56, 189, 248, 0.18);
     }
 
     * {
@@ -28,126 +30,275 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: Arial, sans-serif;
+      overflow: hidden;
+      font-family: Inter, Arial, sans-serif;
       background:
-        radial-gradient(circle at top left, rgba(139, 92, 246, 0.35), transparent 35%),
-        radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.22), transparent 35%),
-        var(--bg);
+        radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(56, 189, 248, 0.22), transparent 28%),
+        linear-gradient(135deg, #ffffff 0%, #f7fbff 45%, #eef8ff 100%);
       color: var(--text);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 28px;
     }
 
-    .wrap {
-      width: 100%;
-      max-width: 520px;
+    .background-blur {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
     }
 
-    .brand {
-      text-align: center;
-      margin-bottom: 28px;
+    .orb {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      filter: blur(70px);
+      animation: float 8s ease-in-out infinite;
     }
 
-    .brand h1 {
-      margin: 0;
-      font-size: 42px;
-      letter-spacing: -1px;
-      background: linear-gradient(90deg, #ffffff, #c084fc, #8b5cf6);
-      -webkit-background-clip: text;
-      color: transparent;
+    .orb.one {
+      top: 8%;
+      left: 10%;
     }
 
-    .brand p {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 15px;
+    .orb.two {
+      right: 8%;
+      bottom: 12%;
+      animation-delay: -3s;
+      background: rgba(14, 165, 233, 0.12);
     }
 
-    .card {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 26px;
-      backdrop-filter: blur(18px);
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-22px);
+      }
     }
 
-    label {
-      display: block;
-      margin-bottom: 8px;
-      color: #eee7ff;
-      font-size: 14px;
-      font-weight: 600;
+    .app {
+      position: relative;
+      z-index: 2;
+      width: min(1180px, 100%);
+      min-height: 650px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      backdrop-filter: blur(26px);
+      border-radius: 38px;
+      padding: 42px;
+      box-shadow:
+        0 30px 80px rgba(15, 23, 42, 0.08),
+        0 0 55px var(--shadow),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+      transform-style: preserve-3d;
+      transition: transform 0.18s ease;
+    }
+
+    .top-row {
+      display: grid;
+      grid-template-columns: 260px 1fr 300px;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .name-box,
+    .progress-box,
+    .message-box {
+      background: var(--panel-strong);
+      border: 1px solid var(--border);
+      box-shadow:
+        0 18px 45px rgba(15, 23, 42, 0.06),
+        0 0 22px rgba(56, 189, 248, 0.16),
+        inset 0 0 18px rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+    }
+
+    .name-box {
+      height: 66px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 18px;
+    }
+
+    .name-icon {
+      width: 24px;
+      height: 24px;
+      color: var(--blue-strong);
+      flex: 0 0 auto;
     }
 
     input,
     textarea {
       width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.13);
-      background: rgba(0, 0, 0, 0.35);
-      color: white;
-      border-radius: 16px;
-      padding: 15px 16px;
-      font-size: 15px;
+      border: none;
       outline: none;
-      transition: 0.2s ease;
+      background: transparent;
+      color: var(--text);
+      font-size: 16px;
+      font-family: inherit;
     }
 
-    input:focus,
-    textarea:focus {
-      border-color: var(--purple);
-      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.18);
+    input::placeholder,
+    textarea::placeholder {
+      color: #8d99aa;
+    }
+
+    .count-title {
+      text-align: center;
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #1f2a44;
+    }
+
+    .count-title span {
+      color: var(--blue-strong);
+    }
+
+    .progress-wrap {
+      width: 100%;
+    }
+
+    .progress-label {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #344054;
+    }
+
+    .progress-track {
+      position: relative;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(56, 189, 248, 0.32);
+      overflow: hidden;
+      box-shadow:
+        inset 0 0 12px rgba(56, 189, 248, 0.12),
+        0 0 18px rgba(56, 189, 248, 0.18);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #7dd3fc, #38bdf8, #0ea5e9);
+      box-shadow: 0 0 18px rgba(14, 165, 233, 0.5);
+      transition: width 0.45s ease;
+    }
+
+    .progress-glow {
+      position: absolute;
+      top: 50%;
+      left: 0%;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      transform: translate(-50%, -50%);
+      background: rgba(56, 189, 248, 0.45);
+      filter: blur(8px);
+      transition: left 0.45s ease;
+    }
+
+    .message-area {
+      margin-top: 115px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .message-box {
+      width: min(960px, 100%);
+      min-height: 170px;
+      border-radius: 30px;
+      display: grid;
+      grid-template-columns: 1fr 92px;
+      overflow: hidden;
     }
 
     textarea {
       min-height: 170px;
-      resize: vertical;
-      line-height: 1.5;
+      resize: none;
+      padding: 34px;
+      line-height: 1.6;
+      font-size: 18px;
     }
 
-    .field {
-      margin-bottom: 18px;
+    .send-section {
+      border-left: 1px solid rgba(56, 189, 248, 0.24);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .counter {
-      text-align: right;
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 6px;
-    }
-
-    button {
-      width: 100%;
-      border: none;
-      border-radius: 16px;
-      padding: 15px 18px;
-      color: white;
-      font-size: 16px;
-      font-weight: 700;
+    .send-btn {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(230, 248, 255, 0.96));
       cursor: pointer;
-      background: linear-gradient(135deg, var(--purple), var(--purple-2));
-      box-shadow: 0 14px 30px rgba(139, 92, 246, 0.35);
-      transition: 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue-strong);
+      box-shadow:
+        0 0 26px rgba(56, 189, 248, 0.32),
+        0 12px 25px rgba(15, 23, 42, 0.08);
+      transition: 0.22s ease;
+      animation: pulse 2.2s ease-in-out infinite;
     }
 
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 18px 40px rgba(139, 92, 246, 0.45);
+    .send-btn:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow:
+        0 0 38px rgba(56, 189, 248, 0.46),
+        0 18px 30px rgba(15, 23, 42, 0.1);
     }
 
-    button:disabled {
+    .send-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
+      animation: none;
       transform: none;
     }
 
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow:
+          0 0 24px rgba(56, 189, 248, 0.28),
+          0 12px 25px rgba(15, 23, 42, 0.08);
+      }
+      50% {
+        box-shadow:
+          0 0 42px rgba(56, 189, 248, 0.48),
+          0 12px 25px rgba(15, 23, 42, 0.08);
+      }
+    }
+
+    .send-icon {
+      width: 29px;
+      height: 29px;
+    }
+
+    .bottom-row {
+      margin-top: 24px;
+      display: flex;
+      justify-content: center;
+    }
+
     .status {
-      margin-top: 16px;
+      min-height: 24px;
+      font-size: 15px;
+      font-weight: 700;
       text-align: center;
-      font-size: 14px;
-      min-height: 22px;
     }
 
     .success {
@@ -158,71 +309,132 @@
       color: var(--danger);
     }
 
-    .footer {
+    .tiny-info {
+      position: absolute;
+      bottom: 24px;
+      left: 0;
+      right: 0;
       text-align: center;
+      font-size: 13px;
       color: var(--muted);
-      font-size: 12px;
-      margin-top: 18px;
     }
 
-    @media (max-width: 520px) {
+    @media (max-width: 850px) {
       body {
-        padding: 16px;
+        overflow: auto;
+        padding: 18px;
       }
 
-      .brand h1 {
-        font-size: 36px;
+      .app {
+        min-height: auto;
+        padding: 24px;
+        border-radius: 28px;
       }
 
-      .card {
-        padding: 22px;
-        border-radius: 22px;
+      .top-row {
+        grid-template-columns: 1fr;
+      }
+
+      .count-title {
+        order: -1;
+        font-size: 25px;
+      }
+
+      .message-area {
+        margin-top: 36px;
+      }
+
+      .message-box {
+        grid-template-columns: 1fr;
+      }
+
+      .send-section {
+        border-left: none;
+        border-top: 1px solid rgba(56, 189, 248, 0.24);
+        padding: 18px;
+      }
+
+      textarea {
+        min-height: 190px;
+        padding: 24px;
+      }
+
+      .tiny-info {
+        position: static;
+        margin-top: 26px;
       }
     }
   </style>
 </head>
 
 <body>
-  <main class="wrap">
-    <section class="brand">
-      <h1>Eanova</h1>
-      <p>Send me a message. No login needed.</p>
-    </section>
+  <div class="background-blur">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+  </div>
 
-    <section class="card">
-      <form id="messageForm">
-        <div class="field">
-          <label for="name">Your name</label>
+  <main class="app" id="app">
+    <form id="messageForm">
+      <section class="top-row">
+        <div class="name-box">
+          <svg class="name-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M20 21C20 16.5817 16.4183 14 12 14C7.58172 14 4 16.5817 4 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+
           <input
             id="name"
             type="text"
             maxlength="50"
-            placeholder="Enter your name"
+            placeholder="Name"
             required
           />
         </div>
 
-        <div class="field">
-          <label for="message">Your message</label>
+        <div class="count-title">
+          No. of texts <span id="textCount">0</span>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-label">Progress</div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+            <div class="progress-glow" id="progressGlow"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="message-area">
+        <div class="message-box">
           <textarea
             id="message"
             maxlength="1000"
-            placeholder="Write your message here..."
+            placeholder="Type your message here..."
             required
           ></textarea>
-          <div class="counter">
-            <span id="charCount">0</span>/1000
+
+          <div class="send-section">
+            <button class="send-btn" id="sendBtn" type="submit" aria-label="Send message">
+              <svg class="send-icon" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M4 12L20 4L16 20L12 14L4 12Z"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
           </div>
         </div>
+      </section>
 
-        <button id="sendBtn" type="submit">Send Message</button>
-
+      <section class="bottom-row">
         <div id="status" class="status"></div>
-      </form>
-    </section>
+      </section>
+    </form>
 
-    <div class="footer">
-      Messages are sent privately to the site owner.
+    <div class="tiny-info">
+      Messages are sent privately. No login needed.
     </div>
   </main>
 
@@ -232,15 +444,34 @@
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    const app = document.getElementById("app");
     const form = document.getElementById("messageForm");
     const nameInput = document.getElementById("name");
     const messageInput = document.getElementById("message");
     const sendBtn = document.getElementById("sendBtn");
     const statusBox = document.getElementById("status");
-    const charCount = document.getElementById("charCount");
+    const textCount = document.getElementById("textCount");
+    const progressFill = document.getElementById("progressFill");
+    const progressGlow = document.getElementById("progressGlow");
 
-    messageInput.addEventListener("input", () => {
-      charCount.textContent = messageInput.value.length;
+    let sentCount = Number(localStorage.getItem("eanova_sent_count") || 0);
+    updateCounter();
+
+    document.addEventListener("mousemove", (event) => {
+      const x = (event.clientX / window.innerWidth) * 100;
+      const y = (event.clientY / window.innerHeight) * 100;
+
+      document.body.style.setProperty("--mouse-x", x + "%");
+      document.body.style.setProperty("--mouse-y", y + "%");
+
+      const rotateX = (event.clientY / window.innerHeight - 0.5) * -5;
+      const rotateY = (event.clientX / window.innerWidth - 0.5) * 5;
+
+      app.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    document.addEventListener("mouseleave", () => {
+      app.style.transform = "rotateX(0deg) rotateY(0deg)";
     });
 
     form.addEventListener("submit", async (event) => {
@@ -249,31 +480,29 @@
       const name = nameInput.value.trim();
       const message = messageInput.value.trim();
 
-      statusBox.textContent = "";
-      statusBox.className = "status";
+      clearStatus();
 
       if (!name) {
-        showError("Please enter your name.");
+        showError("Enter your name first.");
         return;
       }
 
       if (!message) {
-        showError("Please write a message.");
+        showError("Write a message first.");
         return;
       }
 
       if (name.length > 50) {
-        showError("Name must be under 50 characters.");
+        showError("Name is too long.");
         return;
       }
 
       if (message.length > 1000) {
-        showError("Message must be under 1000 characters.");
+        showError("Message is too long.");
         return;
       }
 
       sendBtn.disabled = true;
-      sendBtn.textContent = "Sending...";
 
       const { error } = await supabaseClient
         .from("messages")
@@ -286,19 +515,30 @@
 
       if (error) {
         console.error(error);
-        showError("Something went wrong. Please try again.");
+        showError("Message failed. Check Supabase keys or table policy.");
         sendBtn.disabled = false;
-        sendBtn.textContent = "Send Message";
         return;
       }
 
+      sentCount++;
+      localStorage.setItem("eanova_sent_count", sentCount);
+      updateCounter();
+
+      messageInput.value = "";
       showSuccess("Message sent ✅");
-      form.reset();
-      charCount.textContent = "0";
 
       sendBtn.disabled = false;
-      sendBtn.textContent = "Send Message";
     });
+
+    function updateCounter() {
+      textCount.textContent = sentCount;
+
+      const maxVisual = 10;
+      const percentage = Math.min((sentCount / maxVisual) * 100, 100);
+
+      progressFill.style.width = percentage + "%";
+      progressGlow.style.left = percentage + "%";
+    }
 
     function showSuccess(text) {
       statusBox.textContent = text;
@@ -308,6 +548,11 @@
     function showError(text) {
       statusBox.textContent = text;
       statusBox.className = "status error";
+    }
+
+    function clearStatus() {
+      statusBox.textContent = "";
+      statusBox.className = "status";
     }
   </script>
 </body>
