@@ -146,17 +146,23 @@ textarea {
   border: none;
   outline: none;
   background: transparent;
-  color: var(--text);
+  color: #111827;
   font-family: inherit;
+  font-weight: 600;
 }
 
 input {
   font-size: 16px;
 }
 
-input::placeholder,
+input::placeholder {
+  color: #8a97aa;
+  font-weight: 600;
+}
+
 textarea::placeholder {
-  color: #8d99aa;
+  color: #8a97aa;
+  font-weight: 600;
 }
 
 .count-title {
