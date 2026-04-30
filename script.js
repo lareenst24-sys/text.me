@@ -57,7 +57,7 @@ form.addEventListener("submit", async (event) => {
   }
 
   if (!message) {
-    showError("Write a message first.");
+    showError("Write a message, joke, story, or idea first.");
     return;
   }
 
@@ -94,7 +94,7 @@ form.addEventListener("submit", async (event) => {
   updateTextCounter();
 
   messageInput.value = "";
-  showSuccess("Message sent ✅");
+  showSuccess("Message sent. Thanks for supporting the fund ✅");
 
   sendBtn.disabled = false;
 });
