@@ -1,5 +1,5 @@
-const SUPABASE_URL = "https://qxopmudoddudacpvauhi.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_ZIC5UvRVvV2kL72an5ngOA_J9QhKnmU";
+const SUPABASE_URL ="https://qxopmudoddudacpvauhi.supabase.co";
+const SUPABASE_ANON_KEY ="sb_publishable_ZIC5UvRVvV2kL72an5ngOA_J9QhKnmU";
 
 const FUND_GOAL = 100000;
 
