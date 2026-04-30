@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Eanova - Send a Message</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --bg: #05020a;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.14);
+      --text: #ffffff;
+      --muted: #b7a9cc;
+      --purple: #8b5cf6;
+      --purple-2: #a855f7;
+      --danger: #ff5c7a;
+      --success: #4ade80;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 246, 0.35), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.22), transparent 35%),
+        var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 42px;
+      letter-spacing: -1px;
+      background: linear-gradient(90deg, #ffffff, #c084fc, #8b5cf6);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .brand p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 26px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #eee7ff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      background: rgba(0, 0, 0, 0.35);
+      color: white;
+      border-radius: 16px;
+      padding: 15px 16px;
+      font-size: 15px;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.18);
+    }
+
+    textarea {
+      min-height: 170px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .counter {
+      text-align: right;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 15px 18px;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--purple), var(--purple-2));
+      box-shadow: 0 14px 30px rgba(139, 92, 246, 0.35);
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(139, 92, 246, 0.45);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .status {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 14px;
+      min-height: 22px;
+    }
+
+    .success {
+      color: var(--success);
+    }
+
+    .error {
+      color: var(--danger);
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 16px;
+      }
+
+      .brand h1 {
+        font-size: 36px;
+      }
+
+      .card {
+        padding: 22px;
+        border-radius: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <section class="brand">
+      <h1>Eanova</h1>
+      <p>Send me a message. No login needed.</p>
+    </section>
+
+    <section class="card">
+      <form id="messageForm">
+        <div class="field">
+          <label for="name">Your name</label>
+          <input
+            id="name"
+            type="text"
+            maxlength="50"
+            placeholder="Enter your name"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="message">Your message</label>
+          <textarea
+            id="message"
+            maxlength="1000"
+            placeholder="Write your message here..."
+            required
+          ></textarea>
+          <div class="counter">
+            <span id="charCount">0</span>/1000
+          </div>
+        </div>
+
+        <button id="sendBtn" type="submit">Send Message</button>
+
+        <div id="status" class="status"></div>
+      </form>
+    </section>
+
+    <div class="footer">
+      Messages are sent privately to the site owner.
+    </div>
+  </main>
+
+  <script>
+    const SUPABASE_URL = "PASTE_YOUR_SUPABASE_URL_HERE";
+    const SUPABASE_ANON_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form = document.getElementById("messageForm");
+    const nameInput = document.getElementById("name");
+    const messageInput = document.getElementById("message");
+    const sendBtn = document.getElementById("sendBtn");
+    const statusBox = document.getElementById("status");
+    const charCount = document.getElementById("charCount");
+
+    messageInput.addEventListener("input", () => {
+      charCount.textContent = messageInput.value.length;
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const name = nameInput.value.trim();
+      const message = messageInput.value.trim();
+
+      statusBox.textContent = "";
+      statusBox.className = "status";
+
+      if (!name) {
+        showError("Please enter your name.");
+        return;
+      }
+
+      if (!message) {
+        showError("Please write a message.");
+        return;
+      }
+
+      if (name.length > 50) {
+        showError("Name must be under 50 characters.");
+        return;
+      }
+
+      if (message.length > 1000) {
+        showError("Message must be under 1000 characters.");
+        return;
+      }
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = "Sending...";
+
+      const { error } = await supabaseClient
+        .from("messages")
+        .insert([
+          {
+            name: name,
+            message: message
+          }
+        ]);
+
+      if (error) {
+        console.error(error);
+        showError("Something went wrong. Please try again.");
+        sendBtn.disabled = false;
+        sendBtn.textContent = "Send Message";
+        return;
+      }
+
+      showSuccess("Message sent ✅");
+      form.reset();
+      charCount.textContent = "0";
+
+      sendBtn.disabled = false;
+      sendBtn.textContent = "Send Message";
+    });
+
+    function showSuccess(text) {
+      statusBox.textContent = text;
+      statusBox.className = "status success";
+    }
+
+    function showError(text) {
+      statusBox.textContent = text;
+      statusBox.className = "status error";
+    }
+  </script>
+</body>
+</html>
