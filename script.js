@@ -4,8 +4,8 @@ const SUPABASE_URL = "https://qxopmudoddudacpvauhi.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_ZIC5UvRVvV2kL72an5ngOA_J9QhKnmU";
 
 // MANUALLY EDIT THESE TWO VALUES ONLY.
-const RAISED_DISPLAY_TEXT = "$25,000 / $100,000 · 25%";
-const RAISED_PROGRESS_WIDTH = "25%";
+const RAISED_DISPLAY_TEXT = " 0 / $100,000 · 0%";
+const RAISED_PROGRESS_WIDTH = "0%";
 
 // Popunder ad code URL.
 // It loads only after the user clicks Send & Support.
