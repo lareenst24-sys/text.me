@@ -1,11 +1,18 @@
-console.log("Eanova script loaded v3");
+console.log("Eanova script loaded v4");
 
 const SUPABASE_URL = "https://qxopmudoddudacpvauhi.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_ZIC5UvRVvV2kL72an5ngOA_J9QhKnmU";
 
-// MANUALLY EDIT THESE TWO VALUES ONLY.
-const RAISED_DISPLAY_TEXT = " 0 / $100,000 · 0%";
-const RAISED_PROGRESS_WIDTH = "0%";
+/*
+  MANUAL RAISED DISPLAY ONLY.
+
+  Change these yourself whenever you want.
+  This does NOT calculate anything.
+  This does NOT change when texts are sent.
+*/
+const MANUAL_RAISED_TEXT = "$0 / $100,000";
+const MANUAL_RAISED_PERCENT_TEXT = "0%";
+const MANUAL_PROGRESS_WIDTH = "0%";
 
 // Popunder ad code URL.
 // It loads only after the user clicks Send & Support.
@@ -106,6 +113,8 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
+  // Only text count changes.
+  // Raised amount does NOT change.
   sentCount += 1;
   localStorage.setItem("eanova_sent_count", String(sentCount));
   updateTextCounter();
@@ -128,9 +137,11 @@ function updateTextCounter() {
 }
 
 function updateManualRaisedDisplay() {
-  progressMoney.textContent = RAISED_DISPLAY_TEXT;
-  progressFill.style.width = RAISED_PROGRESS_WIDTH;
-  progressGlow.style.left = RAISED_PROGRESS_WIDTH;
+  progressMoney.textContent =
+    MANUAL_RAISED_TEXT + " · " + MANUAL_RAISED_PERCENT_TEXT;
+
+  progressFill.style.width = MANUAL_PROGRESS_WIDTH;
+  progressGlow.style.left = MANUAL_PROGRESS_WIDTH;
 }
 
 function showSuccess(text) {
